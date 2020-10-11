@@ -13,20 +13,20 @@ AnyswapTelegramBot provides easy information for the telegram users of Anyswap. 
 The program needs to run continously in the background. 
 # FAQ
 Anyswap rewards you for providing liquidity in a similar way to staking a coin in a staking pool. The staked coin, however, in the case of Anyswap, is a special kind of token called LP token (Liquidity Pool Token). When you provide liquidity to Anyswap, you are buying LP tokens with an initial price of 50% of each of the two underlying assets.
-For example: if you pooled 1000$ in the FSN-ANY pool, you are buying 500$ in Fusion and 500$ in Any and exchanging these for FSN-ANY LP tokens.
+For example: if you pooled 1000$ in the FSN-ANY pool, you are buying 500$ in Fusion and 500$ in ANY and exchanging these for FSN-ANY LP tokens.
 
 ## Q1. How am I getting rewarded for providing liquidity?
 Two ways:
 1. ANY rewards: every 24 hours, ANY rewards are distributed for all people providing liquidity on Anyswap.
 2. Pool fees: for every trade, 0.3% of the trade value goes back to the pool, meaning your share increase with every trade.
 ## Q2. Ok. so how are the rewards calculated?
-The rewards are calculated compared to providing liquidity with zero trading fees and no ANY rewards. Of course, it makes no sense to provide liquidity with zero rewards, but this happens, for example, if you provided liquidity on uniswap for a pool with zero trading volume.
+The rewards are calculated compared to providing liquidity with zero trading fees and no ANY rewards. Of course, it makes no sense to provide liquidity with zero rewards, but this happens, for example, if you provided liquidity on uniswap for a pool with very little or zero trading volume.
 ### Examples:
-1. ANY rewards: when APY shows 50% ANY, it means that:
+1. ANY rewards: when APY shows 50% ANY:
 "If you sold all ANY you accumulated for the entire year, and bought back into liquidity pool, you will end up with 50% more LP tokens that what you started with"
-2. Pool fees: when APY shows 50%, it means that:
+2. Pool fees: when APY shows 50%:
 "If you stayed in the pool for the entire year, your LP token now is worth 50% more than your initial purchase (See next question)"
-Note how the rewards are a little different: You are getting more LP tokens for any rewards. But for pool fees, your number of LP tokens stays the same, but their value increases.
+Note how the rewards are a little different: You are getting more LP tokens for ANY rewards. But for pool fees, your number of LP tokens stays the same, but their value increases.
 ## But I am getting less than the calculation shows?
 Two reasons:
 1. The calculation is measured in LP token value, not in USD. If both assets in the Liquidity Pool dropped in USD value, then the LP token value will also drop in USD.  You will end up with less USD, but more of the underlying assets you are pooling.
