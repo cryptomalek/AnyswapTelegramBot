@@ -27,10 +27,10 @@ The rewards are calculated compared to providing liquidity with zero trading fee
 2. Pool fees: when APY shows 50%:
 "If you stayed in the pool for the entire year, your LP token now is worth 50% more than your initial purchase (See next question)"
 Note how the rewards are a little different: You are getting more LP tokens for ANY rewards. But for pool fees, your number of LP tokens stays the same, but their value increases.
-## But I am getting less than the calculation shows?
+## But I am getting less than what the calculation shows?
 Two reasons:
 1. The calculation is measured in LP token value, not in USD. If both assets in the Liquidity Pool dropped in USD value, then the LP token value will also drop in USD.  You will end up with less USD, but more of the underlying assets you are pooling.
-Also, if one coin dropped significantly in value compared to the other, then you are
+2. If one coin dropped significantly in value compared to the other, then you are
  subjected to what's called "Impermanent Loss." Impermanent Loss is temporary as long
   as the price ratio between the underlying assets is the same at the time of your
    entry and exit. Check [The beginner's guide to
@@ -38,7 +38,6 @@ Also, if one coin dropped significantly in value compared to the other, then you
 
 ## I am getting More than the calculation shows?
 If you invest whatever you earned in ANY rewards back in the pool, you are compounding your returns.
-* Assuming ANY value stays the same. If ANY value grows too much, it will be better if you didn't invest it back.
 ## What are the risks of providing liquidity?
 1. if you are not comfortable with exposure to both assets of the pool, then providing liquidity is not for you. For example, you might end up with double your initial investment in terms of both coins, but less than what you started with, as measured in USD
 2. Impermanent Loss: if one coin dropped significantly in value compared to the other, then you are subjected to what's called to Impermanent Loss. Impermanent Loss is temporary as long as the price ratio between the underlying assets is the same at the time of your entry and exit. [The beginner's guide to
