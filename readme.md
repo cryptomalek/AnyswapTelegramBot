@@ -1,7 +1,7 @@
 
 
 # What's AnyswapTelegramBot
-AnyswapTelegramBot provides easy information for the users of Anyswap. Commands include:
+AnyswapTelegramBot provides easy information for the telegram users of Anyswap. Commands include:
 1. APY - get ANY rewards and pool fees for differenet pools
 2. MC - Marketcap info of $ANY
 3. TVL - Total value locked on Anyswap
