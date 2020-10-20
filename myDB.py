@@ -46,8 +46,8 @@ class VOLRecord2:
 
 
 class TVLRecord:
-    def __init__(self, token, tvl, price):
-        self.token = token
+    def __init__(self, name, tvl, price):
+        self.token = name
         self.tvl = tvl
         self.price = price
         return

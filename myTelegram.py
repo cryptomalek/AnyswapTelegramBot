@@ -4,13 +4,8 @@ import exchangeAPI
 import myDB
 import myWeb3
 import threading
-import os
-
-
-def log(msg: str):
-    with open(os.getcwd() + r'\log.txt', 'a', encoding='utf-8') as f:
-        f.write('\n' + msg)
-    return
+import CMC
+import util
 
 
 def mc(update, context):
@@ -22,6 +17,7 @@ def mc(update, context):
         message += '\n' + 'ANY price'.ljust(12) + ': ' + f'${anyprice:.3f}'
         message += '\nCirc. supply'.ljust(12) + ': ' + str(f'{circ:,}') + ' ANY'
         message += '\n' + 'Tot. supply '.ljust(12) + ': ' + '100,000,000 ANY'
+        message += '\n' + 'Calc. CMC Rank'.ljust(12) + ': ' + CMC.getCMCRank()
         message += '</code>'
     except Exception as error:
         message = str(error)
@@ -41,7 +37,7 @@ def printInfo(command, msg, update, context):
         console += '\nYou talk with user {}, his user ID: {} and his name: {} {}'.format(user['username'], user['id'], user['first_name'], user['last_name']) + '\n'
         console += '=' * 30
         print(console)
-        log(console)
+        util.log(console)
     except Exception as error:
         print(error)
     return
@@ -55,8 +51,9 @@ def apy_all(top=500):
     ANY_distributed = True
     i = 0
     for rec in records:
-        i += 1
-        msg += str(i) + '.' + str(rec) + '\n'
+        if not rec.name == 'BNB-BUSD':
+            i += 1
+            msg += str(i) + '.' + str(rec) + '\n'
         if rec.any_rewards == 0:
             ANY_distributed = False
     msg += '</code>'
@@ -154,7 +151,7 @@ def apy(update, context):
         if arg.upper() == 'ALL' or arg.upper() == 'A':
             msg = apy_all()
         elif arg == 'TOP':
-            msg = apy_all(5)
+            msg = apy_all(6)
         else:
             lp = args_to_lp(context.args)
             if lp == '':

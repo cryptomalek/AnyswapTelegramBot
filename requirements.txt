@@ -1,0 +1,4 @@
+telegram~=0.0.1
+psycopg2~=2.8.6
+web3~=5.12.1
+requests~=2.24.0
