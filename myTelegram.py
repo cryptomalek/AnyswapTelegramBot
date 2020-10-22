@@ -17,7 +17,7 @@ def mc(update, context):
         message += '\n' + 'ANY price'.ljust(12) + ': ' + f'${anyprice:.3f}'
         message += '\nCirc. supply'.ljust(12) + ': ' + str(f'{circ:,}') + ' ANY'
         message += '\n' + 'Tot. supply '.ljust(12) + ': ' + '100,000,000 ANY'
-        message += '\n' + 'Calc. CMC Rank'.ljust(12) + ': ' + CMC.getCMCRank()
+        message += '\n' + 'Calc. CMC Rank'.ljust(12) + ': ' + str(CMC.getCMCRank())
         message += '</code>'
     except Exception as error:
         message = str(error)
