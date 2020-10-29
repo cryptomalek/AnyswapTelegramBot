@@ -51,9 +51,8 @@ def apy_all(top=500):
     ANY_distributed = True
     i = 0
     for rec in records:
-        if not rec.name == 'BNB-BUSD':
-            i += 1
-            msg += str(i) + '.' + str(rec) + '\n'
+        i += 1
+        msg += str(i) + '.' + str(rec) + '\n'
         if rec.any_rewards == 0:
             ANY_distributed = False
     msg += '</code>'
