@@ -8,7 +8,9 @@ nonCircAddresses = ['0x3f7a5b59EbADA1BA45319eE2D6e8aAaaB7dC1862', '0x71c56B08F56
                     '0xa96a3A188dA5b1F958e75C169a4A5E22B63f3273', '0x2175546B3121e15FF270D974259644f865C670c3', '0xf2834163568277D4D3Aa93CF15E54700c91CA312']
 fANY = '0x0c74199D22f732039e843366a236Ff4F61986B32'
 
-w3f = Web3(Web3.HTTPProvider('https://mainnetpublicgateway1.fusionnetwork.io:10000'))
+fsn_gateway_url = 'https://mainnetpublicgateway1.fusionnetwork.io:10000'
+fsn_gateway_url = 'https://gw.redefi.tech'
+w3f = Web3(Web3.HTTPProvider(fsn_gateway_url))
 w3e = Web3(Web3.HTTPProvider(
     'https://mainnet.infura.io/v3/25498f326072430f8a9f62f681e3a0da'))
 w3b = Web3(Web3.HTTPProvider('https://bsc-dataseed1.binance.org:443'))

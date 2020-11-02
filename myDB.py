@@ -35,6 +35,16 @@ class ILRecord:
         return pad(self.period, '<') + ':' + pad(formatPercent(self.il, 3))
 
 
+class NetRecord:
+    def __init__(self, period, net):
+        self.period = period
+        self.net = net
+        return
+
+    def __str__(self):
+        return pad(self.period, '<') + ':' + pad(formatPercent(self.net, 3))
+
+
 class VOLRecord2:
     def __init__(self, name, vol):
         self.name = name
@@ -97,6 +107,28 @@ def getIL(lp):
         result = []
         for row in rows:
             rec = ILRecord(row[0], row[1])
+            result.append(rec)
+        cur.close()
+        return result
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+def getNet(lp):
+    conn = None
+    try:
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        sql = f'SELECT period, net FROM net_lp WHERE lp = \'{lp}\' ORDER BY day;'
+        cur.execute(sql)
+        rows = cur.fetchall()
+        result = []
+        for row in rows:
+            rec = NetRecord(row[0], row[1])
             result.append(rec)
         cur.close()
         return result

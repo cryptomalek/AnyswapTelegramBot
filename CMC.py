@@ -6,7 +6,7 @@ url = 'https://pro-api.coinmarketcap.com//v1/cryptocurrency/listings/latest'
 parameters = {
     'start': '1',
     'limit': '1',
-    'market_cap_max': '6227112',
+    'market_cap_max': '0',
     'convert': 'USD'
 }
 headers = {
@@ -15,13 +15,14 @@ headers = {
 }
 
 
-def getCMCRank():
+def getCMCRank(mc):
     session = Session()
     session.headers.update(headers)
     try:
+        parameters['market_cap_max'] = int(mc)
         response = session.get(url, params=parameters)
         data = json.loads(response.text)
-        return data['data'][0]['cmc_rank'] - 1
+        return data['data'][0]['cmc_rank']
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
         return 999

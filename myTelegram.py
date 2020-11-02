@@ -13,11 +13,12 @@ def mc(update, context):
         circ = 100000000 - int(myWeb3.getCirc())
         anyprice = myWeb3.getPrice('ANY')
         message = '<code>'
-        message += 'Market cap'.ljust(12) + ': ' + f'${int(circ * anyprice):,}'
+        mc = int(circ * anyprice)
+        message += 'Market cap'.ljust(12) + ': ' + f'${mc:,}'
         message += '\n' + 'ANY price'.ljust(12) + ': ' + f'${anyprice:.3f}'
         message += '\nCirc. supply'.ljust(12) + ': ' + str(f'{circ:,}') + ' ANY'
         message += '\n' + 'Tot. supply '.ljust(12) + ': ' + '100,000,000 ANY'
-        message += '\n' + 'Calc. CMC Rank'.ljust(12) + ': ' + str(CMC.getCMCRank())
+        # message += '\n' + 'Calc. CMC Rank'.ljust(12) + ': ' + str(CMC.getCMCRank(mc))
         message += '</code>'
     except Exception as error:
         message = str(error)
@@ -132,6 +133,21 @@ def il_lp(lp):
             return 'Data not found.'
         for rec in records:
             if rec.il is not None:
+                msg += str(rec) + '\n'
+        msg += '</code>'
+        return msg
+    else:
+        return f"'{lp}' pool is not found"
+
+
+def net_lp(lp):
+    if myDB.isValidLP(lp):
+        msg = f'<b>Net Growth for {lp} pool</b>\n<code>'
+        records = myDB.getNet(lp)
+        if len(records) == 0:
+            return 'Data not found.'
+        for rec in records:
+            if rec.net:
                 msg += str(rec) + '\n'
         msg += '</code>'
         return msg
@@ -282,3 +298,23 @@ def deleteMsgTimer(bot, message):
                            message_id=message.message_id)
     except Exception as error:
         print(error)
+
+
+@run_async
+def net(update, context):
+    try:
+        msg = ''
+        if len(context.args) == 0:
+            msg = 'Please specify a pool'
+        else:
+            lp = args_to_lp(context.args)
+            if lp == '':
+                msg = f'Invalid parameters "{" ".join(context.args)}"\nPlease specify a valid pool.'
+            else:
+                msg = net_lp(lp)
+    except Exception as error:
+        msg = str(error)
+    printInfo('NET', msg, update, context)
+    message = context.bot.send_message(chat_id=update.effective_chat.id, text=msg, parse_mode='HTML')
+    deleteMsg(context.bot, message)
+    return

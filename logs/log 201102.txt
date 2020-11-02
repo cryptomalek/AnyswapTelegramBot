@@ -1,0 +1,172 @@
+
+2020-11-02 18:59:57.905581
+Command : /MC 
+Result : <code>Market cap  : $4,160,935
+ANY price   : $0.362
+Circ. supply: 11,496,186 ANY
+Tot. supply : 100,000,000 ANY
+Calc. CMC Rank: 676</code>
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:32:28.277647
+Command : /NET 
+Result : Please specify a pool
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:32:31.526626
+Command : /NET fsnuni
+Result : 'FSN-UNI' pool is not found
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:32:46.369277
+Command : /APY fsnusdt
+Result : 'FSN-USDT' pool is not found
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:32:52.128443
+Command : /IL fsnuni
+Result : 'FSN-UNI' pool is not found
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:32:55.895531
+Command : /NET fsnuni
+Result : 'FSN-UNI' pool is not found
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:33:44.951437
+Command : /APY 
+Result : object of type 'NoneType' has no len()
+You talk with user ChookzN, his user ID: 383329581 and his name: Chookz None
+==============================
+2020-11-02 22:34:23.865617
+Command : /APY 
+Result : <b>APY over the last 24 hours</b>
+<code>1.BNB-ANY: 278.72% (146.66% ANY + 132.06% Fees)
+2.FSN-ANY: 117.58% (73.03% ANY + 44.55% Fees)
+3.FSN-BTC: 114.88% (35.77% ANY + 79.12% Fees)
+4.FSN-ETH: 100.88% (35.37% ANY + 65.51% Fees)
+5.FSN-USDT: 89.37% (35.05% ANY + 54.31% Fees)
+6.BNB-FOR: 74.67% (68.67% ANY + 5.99% Fees)
+</code>
+<em>Hint: use "apy FSNANY" for historical returns on FSN-ANY pool</em>
+You talk with user ChookzN, his user ID: 383329581 and his name: Chookz None
+==============================
+2020-11-02 22:34:25.103851
+Command : /NET 
+Result : Please specify a pool
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:34:29.129548
+Command : /NET fsnany
+Result : 'NetRecord' object has no attribute 'il'
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:34:34.849616
+Command : /APY fsnany
+Result : <b>APY for FSN-ANY pool</b>
+<code>1 Day: 117.58% (73.03% ANY + 44.55% Fees)
+2 Days: 118.78% (73.29% ANY + 45.49% Fees)
+3 Days: 118.18% (73.23% ANY + 44.95% Fees)
+1 Week: 112.57% (73.02% ANY + 39.55% Fees)
+2 Weeks: 104.98% (72.65% ANY + 32.33% Fees)
+1 Month: 109.95% (75.73% ANY + 34.21% Fees)
+</code>
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:35:10.414193
+Command : /NET fsnany
+Result : <b>Net Growth for FSN-ANY pool</b>
+<code>1 Day   : 0.331% 
+2 Days  : 0.686% 
+3 Days  : 1.028% 
+1 Week  : 2.355% 
+2 Weeks : 4.906% 
+1 Month :11.985% 
+</code>
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:35:19.875884
+Command : /APY fsnany
+Result : <b>APY for FSN-ANY pool</b>
+<code>1 Day: 117.58% (73.03% ANY + 44.55% Fees)
+2 Days: 118.78% (73.29% ANY + 45.49% Fees)
+3 Days: 118.18% (73.23% ANY + 44.95% Fees)
+1 Week: 112.57% (73.02% ANY + 39.55% Fees)
+2 Weeks: 104.98% (72.65% ANY + 32.33% Fees)
+1 Month: 109.95% (75.73% ANY + 34.21% Fees)
+</code>
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:35:23.611356
+Command : /IL fsnany
+Result : <b>Impermanent Loss for FSN-ANY pool</b>
+<code>1 Day   :-0.009% 
+2 Days  :-0.036% 
+3 Days  :-0.058% 
+1 Week  :-0.198% 
+2 Weeks :-0.882% 
+1 Month :-2.954% 
+</code>
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:36:56.534923
+Command : /APY 
+Result : <b>APY over the last 24 hours</b>
+<code>1.BNB-ANY: 279.69% (147.81% ANY + 131.89% Fees)
+2.FSN-ANY: 118.02% (73.60% ANY + 44.42% Fees)
+3.FSN-BTC: 115.30% (36.04% ANY + 79.26% Fees)
+4.FSN-ETH: 102.16% (35.65% ANY + 66.51% Fees)
+5.FSN-USDT: 89.53% (35.33% ANY + 54.21% Fees)
+6.BNB-FOR: 75.25% (69.21% ANY + 6.04% Fees)
+</code>
+<em>Hint: use "apy FSNANY" for historical returns on FSN-ANY pool</em>
+You talk with user georgesemail, his user ID: 417138249 and his name: George None
+==============================
+2020-11-02 22:38:34.950209
+Command : /NET fsnany
+Result : <b>Net Growth for FSN-ANY pool</b>
+<code>1 Day   : 0.312% 
+2 Days  : 0.613% 
+3 Days  : 0.913% 
+1 Week  : 1.958% 
+2 Weeks : 3.141% 
+1 Month : 6.075% 
+</code>
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:38:43.292252
+Command : /NET fsnuni
+Result : <b>Net Growth for FSN-UNI pool</b>
+<code>1 Day   : 0.100% 
+2 Days  : 0.108% 
+3 Days  : 0.066% 
+1 Week  : 0.336% 
+2 Weeks : 1.261% 
+1 Month : 2.691% 
+</code>
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:39:02.596902
+Command : /NET bnbany
+Result : <b>Net Growth for BNB-ANY pool</b>
+<code>1 Day   : 0.452% 
+2 Days  : 1.520% 
+3 Days  : 2.286% 
+1 Week  : 5.074% 
+2 Weeks : 7.192% 
+1 Month :14.419% 
+</code>
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================
+2020-11-02 22:39:05.957012
+Command : /NET bnbusdt
+Result : <b>Net Growth for BNB-USDT pool</b>
+<code>1 Day   : 0.188% 
+2 Days  : 0.386% 
+3 Days  : 0.580% 
+1 Week  : 1.279% 
+2 Weeks : 2.379% 
+1 Month : 4.404% 
+</code>
+You talk with user ahmed6174, his user ID: 855424345 and his name: Ahmed None
+==============================

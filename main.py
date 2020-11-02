@@ -1,11 +1,12 @@
 from telegram.ext import Updater, CommandHandler
-from myTelegram import apy, mc, il, tvl, vol
+from myTelegram import apy, mc, il, tvl, vol, net
 from datetime import datetime
+
 
 def loadTelegramAPI():
     with open('telegramapi.txt', 'r') as f:
         return f.read()
-    
+
 
 def main():
     updater = Updater(loadTelegramAPI(), use_context=True)
@@ -15,6 +16,7 @@ def main():
     dp.add_handler(CommandHandler('il', il))
     dp.add_handler(CommandHandler('tvl', tvl))
     dp.add_handler(CommandHandler('vol', vol))
+    dp.add_handler(CommandHandler('net', net))
     updater.start_polling()
     updater.idle()
 
