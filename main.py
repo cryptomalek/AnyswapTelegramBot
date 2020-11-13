@@ -1,6 +1,5 @@
 from telegram.ext import Updater, CommandHandler
 from myTelegram import apy, mc, il, tvl, vol, net
-from datetime import datetime
 
 
 def loadTelegramAPI():

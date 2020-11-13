@@ -4,7 +4,6 @@ import exchangeAPI
 import myDB
 import myWeb3
 import threading
-import CMC
 import util
 
 
@@ -22,6 +21,7 @@ def mc(update, context):
         message += '</code>'
     except Exception as error:
         message = str(error)
+        util.error()
     printInfo('MC', message, update, context)
     tg_msg = context.bot.send_message(chat_id=update.effective_chat.id, text=message,
                                       parse_mode='HTML')
@@ -40,12 +40,13 @@ def printInfo(command, msg, update, context):
         print(console)
         util.log(console)
     except Exception as error:
+        util.error()
         print(error)
     return
 
 
 def apy_all(top=500):
-    msg = '<b>APY over the last 24 hours</b>\n<code>'
+    msg = '<b>APY over the last 24 hours</b>\n'
     records = myDB.getAPY('', top)
     if len(records) == 0:
         return 'Unable to load data'
@@ -56,10 +57,10 @@ def apy_all(top=500):
         msg += str(i) + '.' + str(rec) + '\n'
         if rec.any_rewards == 0:
             ANY_distributed = False
-    msg += '</code>'
+    msg += ''
     if not ANY_distributed:
         msg += '<em>* Some ANY rewards are not distributed yet.</em>\n'
-    msg += '\n<em>Hint: use "apy FSNANY" for historical returns on FSN-ANY pool</em>'
+    msg += f'\n<em>check {util.build_href("","","AnySwapInfo")} for detailed stats and APY</em>'
     return msg
 
 
@@ -84,7 +85,7 @@ def apy_lp(lp):
 
 
 def vol_all(arg='TOP'):
-    msg = '<b>Trading Volume over the last 24 hours</b>\n<code>'
+    msg = '<b>Trading Volume over the last 24 hours</b>\n'
     if arg == 'CALC':
         records = myDB.getVOLCALC()
     else:
@@ -103,7 +104,7 @@ def vol_all(arg='TOP'):
         msg += 'Others'.ljust(10) + f'${others_volume:,.0f}\n'
     msg += '=' * 20 + '\n'
     msg += 'Total'.ljust(10) + f'${total_volume:,.0f}'
-    msg += '</code>'
+    msg += ''
     if arg == 'CALC':
         msg += '\n<em>* Volume information is approximate.</em>'
     return msg
@@ -174,6 +175,7 @@ def apy(update, context):
             else:
                 msg = apy_lp(lp)
     except Exception as error:
+        util.error()
         msg = str(error)
     printInfo('APY', msg, update, context)
     message = context.bot.send_message(chat_id=update.effective_chat.id, text=msg, parse_mode='HTML')
@@ -199,6 +201,7 @@ def vol(update, context):
             else:
                 msg = vol_lp(lp)
     except Exception as error:
+        util.error()
         msg = str(error)
     printInfo('VOL', msg, update, context)
     message = context.bot.send_message(chat_id=update.effective_chat.id, text=msg, parse_mode='HTML')
@@ -211,6 +214,7 @@ def tvl(update, context):
     try:
         msg = tvl_all()
     except Exception as error:
+        util.error()
         msg = str(error)
     printInfo('TVL', msg, update, context)
     tg_msg = context.bot.send_message(chat_id=update.effective_chat.id, text=msg, parse_mode='HTML')
@@ -251,6 +255,7 @@ def il(update, context):
             else:
                 msg = il_lp(lp)
     except Exception as error:
+        util.error()
         msg = str(error)
     printInfo('IL', msg, update, context)
     message = context.bot.send_message(chat_id=update.effective_chat.id, text=msg, parse_mode='HTML')
@@ -259,7 +264,7 @@ def il(update, context):
 
 
 def tvl_all():
-    msg = '<b>Total Value Locked (TVL) on Anyswap</b>\n<code>'
+    msg = '<b>Total Value Locked (TVL) on Anyswap</b>\n'
     records = myDB.getTVLall()
     if len(records) == 0:
         return 'Unable to load data'
@@ -277,7 +282,7 @@ def tvl_all():
         msg += str(f'${others_tvl:,.0f}').ljust(10) + ' Others\n'
     msg += '=' * 17 + '\n'
     msg += str(f'${total_tvl:,.0f}').ljust(10) + ' Total'
-    msg += '</code>'
+    msg += ''
     return msg
 
 
@@ -313,6 +318,7 @@ def net(update, context):
             else:
                 msg = net_lp(lp)
     except Exception as error:
+        util.error()
         msg = str(error)
     printInfo('NET', msg, update, context)
     message = context.bot.send_message(chat_id=update.effective_chat.id, text=msg, parse_mode='HTML')

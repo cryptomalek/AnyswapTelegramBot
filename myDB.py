@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import psycopg2
+import util
 from config import config
 
 
@@ -22,7 +23,7 @@ class APYRecord:
         return
 
     def __str__(self):
-        return f'{self.name}: {formatPercent(self.total_rewards)} ({formatPercent(self.any_rewards)} ANY + {formatPercent(self.trading_rewards)} Fees)'
+        return f'{util.build_href("pair", self.name, self.name)}: {formatPercent(self.total_rewards)} ({formatPercent(self.any_rewards)} ANY + {formatPercent(self.trading_rewards)} Fees)'
 
 
 class ILRecord:
@@ -67,7 +68,7 @@ class TVLRecord:
             formatted_tvl = str(f'{self.tvl:.2f}').ljust(10)
         else:
             formatted_tvl = str(f'{self.tvl:,.0f}').ljust(10)
-        return formatted_tvl + f' {self.token}'
+        return formatted_tvl + f' {util.build_href("token", self.token, self.token)}'
 
 
 def getVOLCALC(lp=''):

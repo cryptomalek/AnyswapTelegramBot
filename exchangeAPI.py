@@ -1,5 +1,6 @@
 import requests
 import myWeb3
+import util
 
 api_url = 'https://api.anyswap.exchange/ticker'
 
@@ -25,7 +26,7 @@ class VOLRecord:
         return
 
     def __str__(self):
-        return self.name.ljust(10) + f'${self.vol:,.0f}'
+        return util.build_href('pair', self.name, self.name.ljust(10)) + f'${self.vol:,.0f}'
 
 
 def getVOL():
