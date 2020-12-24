@@ -6,7 +6,14 @@ base_address = '0x0000000000000000000000000000000000000000'
 
 nonCircAddresses = ['0x3f7a5b59EbADA1BA45319eE2D6e8aAaaB7dC1862', '0x71c56B08F562F53d0fb617A23F94AB2c9f8e4703', '0xe29972f7a35d89E9EE40F36983021D96340C4863',
                     '0xa96a3A188dA5b1F958e75C169a4A5E22B63f3273', '0x2175546B3121e15FF270D974259644f865C670c3', '0xf2834163568277D4D3Aa93CF15E54700c91CA312']
-fANY = '0x0c74199D22f732039e843366a236Ff4F61986B32'
+fany_address = '0x0c74199D22f732039e843366a236Ff4F61986B32'
+fusdt_address = '0xC7c64aC6d46be3d6EA318ec6276Bb55291F8E496'
+busdt_address = '0x55d398326f99059fF775485246999027B3197955'
+bcyc_address = Web3.toChecksumAddress('0x4028433877f9c14764eb93d0bb6570573da2726f')
+fsn_any_address = '0x049DdC3CD20aC7a2F6C867680F7E21De70ACA9C3'
+fsn_usdt_address = '0x78917333bec47cEe1022b31A136D31FEfF90D6FB'
+bnb_usdt_address = '0x83034714666B0EB2209Aafc1B1CBB2AB9c6100Db'
+bnb_cyc_address = Web3.toChecksumAddress('0x0df8810714Dde679107c01503E200cE300d0DCf6')
 
 fsn_gateway_url = 'https://mainnetpublicgateway1.fusionnetwork.io:10000'
 fsn_gateway_url = 'https://gw.redefi.tech'
@@ -21,7 +28,7 @@ with open('ERC20abi.json') as json_file:
 def getCirc():
     balance = 0
     for ta in nonCircAddresses:
-        contract = w3f.eth.contract(fANY, abi=abi)
+        contract = w3f.eth.contract(fany_address, abi=abi)
         balance += contract.functions.balanceOf(ta).call()
     return balance / 10 ** 18
 
@@ -57,20 +64,20 @@ def getDecimals(network, tokenAddress):
     return contract.functions.decimals().call()
 
 
-def getPrice(token):
-    fany_address = '0x0c74199D22f732039e843366a236Ff4F61986B32'
-    fusdt_address = '0xC7c64aC6d46be3d6EA318ec6276Bb55291F8E496'
-    busdt_address = '0x55d398326f99059fF775485246999027B3197955'
-    fsn_any_address = '0x049DdC3CD20aC7a2F6C867680F7E21De70ACA9C3'
-    fsn_usdt_address = '0x78917333bec47cEe1022b31A136D31FEfF90D6FB'
-    bnb_usdt_address = '0x83034714666B0EB2209Aafc1B1CBB2AB9c6100Db'
+def getCYCTotalSupply():
+    contract = w3b.eth.contract(address=bcyc_address, abi=abi)
+    return contract.functions.totalSupply().call() // 10 ** 18
 
+
+def getPrice(token):
     if token == 'FSN':
         return float(getBalance('FSN', fsn_usdt_address, fusdt_address)) / float(getBalance('FSN', fsn_usdt_address, base_address))
     elif token == 'BNB' or token == 'BSC':
         return float(getBalance('BSC', bnb_usdt_address, busdt_address)) / float(getBalance('BSC', bnb_usdt_address, base_address))
     elif token == 'ANY':
         return float(getPrice('FSN') * float(getBalance('FSN', fsn_any_address, base_address))) / float(getBalance('FSN', fsn_any_address, fany_address))
+    elif token == 'CYC':
+        return float(getPrice('BNB') * float(getBalance('BSC', bnb_cyc_address, base_address))) / float(getBalance('BSC', bnb_cyc_address, bcyc_address))
     else:
         raise Exception(f'Unrecognized token in getPrice function: "{token}"')
 

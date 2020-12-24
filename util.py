@@ -1,3 +1,4 @@
+import math
 import os
 from datetime import datetime
 from config import site_url
@@ -24,6 +25,34 @@ def error():
     return
 
 
-def build_href(path, page, name):
-    full_url = '/'.join([site_url, path, page]).replace(r'//', '/')
-    return f"<a href='{full_url}'>{name}</a>"
+def build_href(path, page, name, length=0):
+    full_url = '/'.join([site_url, path, page])
+    return f"<a href='{full_url}'>{name.ljust(length)}</a>"
+
+
+def get_precision(amount):
+    if amount == 0:
+        return 0
+    return max(0, 3 - math.floor(math.log(amount, 10)))
+
+
+def formatcurrency(price):
+    if price is None:
+        return '-'
+    return '$' + "{:,.{}f}".format(price, get_precision(price))
+
+
+def formatnumber(amount):
+    if amount is None:
+        return '-'
+    return "{:,.{}f}".format(amount, get_precision(amount))
+
+
+def pad(s: str, dirc='^') -> str:
+    return f'{s:{dirc}8}'
+
+
+def formatPercent(percentage: int, precision=1) -> str:
+    if percentage is None:
+        return '-'
+    return "{:.{}f}%".format(percentage * 100, precision)

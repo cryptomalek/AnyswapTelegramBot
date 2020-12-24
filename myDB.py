@@ -4,16 +4,6 @@ import util
 from config import config
 
 
-def formatPercent(percentage: int, precision=2) -> str:
-    if percentage is None:
-        return '-'
-    return "{:.{}f}%".format(percentage * 100, precision)
-
-
-def pad(s: str, dirc='^') -> str:
-    return f'{s:{dirc}8}'
-
-
 class APYRecord:
     def __init__(self, name, any_rewards, trading_rewards, total_rewards):
         self.name = name
@@ -23,7 +13,8 @@ class APYRecord:
         return
 
     def __str__(self):
-        return f'{util.build_href("pair", self.name, self.name)}: {formatPercent(self.total_rewards)} ({formatPercent(self.any_rewards)} ANY + {formatPercent(self.trading_rewards)} Fees)'
+        return f'{util.build_href("pair", self.name, self.name.ljust(12))}: <code>{util.formatPercent(self.total_rewards)} ({util.formatPercent(self.any_rewards)} ANY +' \
+               f' {util.formatPercent(self.trading_rewards)} Fees)</code>'
 
 
 class ILRecord:
@@ -33,7 +24,7 @@ class ILRecord:
         return
 
     def __str__(self):
-        return pad(self.period, '<') + ':' + pad(formatPercent(self.il, 3))
+        return util.pad(self.period, '<') + ':' + util.pad(util.formatPercent(self.il, 3))
 
 
 class NetRecord:
@@ -43,7 +34,7 @@ class NetRecord:
         return
 
     def __str__(self):
-        return pad(self.period, '<') + ':' + pad(formatPercent(self.net, 3))
+        return util.pad(self.period, '<') + ':' + util.pad(util.formatPercent(self.net, 3))
 
 
 class VOLRecord2:
@@ -53,22 +44,23 @@ class VOLRecord2:
         return
 
     def __str__(self):
-        return self.name.ljust(10) + f'${self.vol:,.0f}'
+        return util.build_href('pair', self.name, self.name.ljust(12)) + f'<code>${self.vol:,.0f}</code>'
 
 
 class TVLRecord:
     def __init__(self, name, tvl, price):
         self.token = name
-        self.tvl = tvl
-        self.price = price
+        self.tvl = float(tvl)
+        self.price = float(price)
+        self.usd = self.tvl * self.price
+        self.index = 0
         return
 
     def __str__(self):
-        if self.tvl < 1000:
-            formatted_tvl = str(f'{self.tvl:.2f}').ljust(10)
-        else:
-            formatted_tvl = str(f'{self.tvl:,.0f}').ljust(10)
-        return formatted_tvl + f' {util.build_href("token", self.token, self.token)}'
+        formatted_index = str(str(self.index) + '.').ljust(4)
+        formatted_tvl = util.formatnumber(self.tvl).ljust(12)
+        formatted_token = util.build_href("token", self.token, self.token.ljust(6))
+        return f'{formatted_index}{formatted_tvl}{formatted_token}{util.formatcurrency(self.usd)}'
 
 
 def getVOLCALC(lp=''):
@@ -147,9 +139,11 @@ def getAPY(lp='', top=500):
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         if lp == '':
-            sql = f'SELECT name, "any", trading, total FROM apy_all limit {top};'
+            sql = f'SELECT name, "any", trading, total FROM apy_all limit {top} ;'
         else:
-            sql = f'SELECT description, "any", trading, total FROM apy_lp WHERE name = \'{lp}\' ORDER BY day;'
+            # sql = f'SELECT description, "any", trading, total FROM apy_lp WHERE name = \'{lp}\' ORDER BY day;'
+            sql = f'SELECT name, "any", trading, total FROM apy_all ' + f" WHERE UPPER(name) LIKE UPPER('%{lp}%');"
+            print('sql statement: ' + sql)
         cur.execute(sql)
         rows = cur.fetchall()
         result = []
@@ -159,6 +153,7 @@ def getAPY(lp='', top=500):
         cur.close()
         return result
     except (Exception, psycopg2.DatabaseError) as error:
+        util.error()
         print(error)
     finally:
         if conn is not None:
@@ -172,7 +167,7 @@ def getTVLall():
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
         cur.execute(
-            f'SELECT token, tvl, price FROM tvl_all;')
+            f'SELECT token, tvl, price FROM tvl_all ORDER BY tvl*price DESC')
         rows = cur.fetchall()
         result = []
         for row in rows:
@@ -202,6 +197,29 @@ def isValidLP(lp: str) -> bool:
         return result
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+def getVol():
+    conn = None
+    try:
+        params = config()
+        conn = psycopg2.connect(**params)
+        cur = conn.cursor()
+        cur.execute(
+            f'SELECT lp, vol FROM daily_xvol;')
+        rows = cur.fetchall()
+        result = []
+        for row in rows:
+            rec = VOLRecord2(row[0], row[1])
+            result.append(rec)
+        cur.close()
+        return result
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        return []
     finally:
         if conn is not None:
             conn.close()

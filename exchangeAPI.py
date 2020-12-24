@@ -41,5 +41,6 @@ def getVOL():
             result.append(rec)
         return result
     except Exception as error:
+        util.error()
         print(error)
     return

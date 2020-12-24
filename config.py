@@ -1,6 +1,8 @@
 #!/usr/bin/python
 from configparser import ConfigParser
+
 site_url = 'https://anyswapinfo.com'
+
 
 def config(filename='database.ini', section='postgresql'):
     # create a parser

@@ -1,10 +1,18 @@
 from telegram.ext.dispatcher import run_async
-from datetime import datetime
+from datetime import datetime, timedelta, datetime
 import exchangeAPI
+import time
 import myDB
 import myWeb3
 import threading
 import util
+
+
+def minutes_till_hourhead():
+    delta = timedelta(hours=1)
+    now = datetime.now()
+    next_hour = (now + delta).replace(microsecond=0, second=0, minute=1)
+    return (next_hour - now).seconds // 60
 
 
 def mc(update, context):
@@ -35,7 +43,7 @@ def printInfo(command, msg, update, context):
         console += f'Command : /{command} {" ".join(context.args)}\n'
         console += f'Result : {msg}'
         user = update.message.from_user
-        console += '\nYou talk with user {}, his user ID: {} and his name: {} {}'.format(user['username'], user['id'], user['first_name'], user['last_name']) + '\n'
+        console += 'You talk with user {}, his user ID: {} and his name: {}'.format(user['username'], user['id'], user['first_name']) + '\n'
         console += '=' * 30
         print(console)
         util.log(console)
@@ -45,9 +53,11 @@ def printInfo(command, msg, update, context):
     return
 
 
-def apy_all(top=500):
+def apy_all(lp='', top=500):
     msg = '<b>APY over the last 24 hours</b>\n'
-    records = myDB.getAPY('', top)
+    start = time.perf_counter()
+    records = myDB.getAPY(lp, top)
+    print('after getAPY', time.perf_counter() - start)
     if len(records) == 0:
         return 'Unable to load data'
     ANY_distributed = True
@@ -58,30 +68,11 @@ def apy_all(top=500):
         if rec.any_rewards == 0:
             ANY_distributed = False
     msg += ''
-    if not ANY_distributed:
-        msg += '<em>* Some ANY rewards are not distributed yet.</em>\n'
-    msg += f'\n<em>check {util.build_href("","","AnySwapInfo")} for detailed stats and APY</em>'
+    # if not ANY_distributed:
+    #    msg += '<em>* Some ANY rewards are not distributed yet.</em>\n'
+    # msg += f'\n<em>check {util.build_href("", "", "AnySwapInfo")} for detailed stats and APY</em>'
+    msg += '\n' + r'<em>Use /apy <b>FILTER</b> to show only pools that contain the word <b>FILTER</b></em>'
     return msg
-
-
-def apy_lp(lp):
-    if myDB.isValidLP(lp):
-        msg = f'<b>APY for {lp} pool</b>\n<code>'
-        records = myDB.getAPY(lp, 0)
-        if len(records) == 0:
-            return 'Unable to load data'
-        ANY_distributed = True
-        for rec in records:
-            if rec.any_rewards is not None:
-                if rec.any_rewards == 0:
-                    ANY_distributed = False
-                msg += str(rec) + '\n'
-        msg += '</code>'
-        if not ANY_distributed:
-            msg += '<em>* Some ANY rewards are not distributed yet.</em>'
-        return msg
-    else:
-        return f"'{lp}' pool is not found"
 
 
 def vol_all(arg='TOP'):
@@ -89,7 +80,7 @@ def vol_all(arg='TOP'):
     if arg == 'CALC':
         records = myDB.getVOLCALC()
     else:
-        records = exchangeAPI.getVOL()
+        records = myDB.getVol()
     if len(records) == 0:
         return 'Unable to load data'
     total_volume = 0
@@ -101,29 +92,13 @@ def vol_all(arg='TOP'):
             msg += str(rec) + '\n'
         total_volume += rec.vol
     if arg == 'TOP':
-        msg += 'Others'.ljust(10) + f'${others_volume:,.0f}\n'
-    msg += '=' * 20 + '\n'
-    msg += 'Total'.ljust(10) + f'${total_volume:,.0f}'
+        msg += '<code>' + 'Others'.ljust(10) + f'${others_volume:,.0f}</code>\n'
+    msg += '<code>' + '=' * 20 + '</code>\n'
+    msg += '<code>' + 'Total'.ljust(10) + f'${total_volume:,.0f}</code>'
     msg += ''
     if arg == 'CALC':
         msg += '\n<em>* Volume information is approximate.</em>'
     return msg
-
-
-def vol_lp(lp):
-    # NOT USED
-    if myDB.isValidLP(lp):
-        msg = f'<b>Trading Volume for {lp} pool</b>\n<code>'
-        records = exchangeAPI.getVOL()
-        if len(records) == 0:
-            return 'Unable to load data'
-        for rec in records:
-            if rec.vol is not None:
-                msg += str(rec) + '\n'
-        msg += '</code><em>* Volume information is approximate.</em>'
-        return msg
-    else:
-        return f"'{lp}' pool is not found"
 
 
 def il_lp(lp):
@@ -164,16 +139,13 @@ def apy(update, context):
             arg = "TOP"
         else:
             arg = ''.join(context.args).upper()
-        if arg.upper() == 'ALL' or arg.upper() == 'A':
+
+        if arg == "TOP":
+            msg = apy_all(top=6)
+        elif arg.upper() == 'ALL':
             msg = apy_all()
-        elif arg == 'TOP':
-            msg = apy_all(6)
         else:
-            lp = args_to_lp(context.args)
-            if lp == '':
-                msg = f'Invalid command "{" ".join(context.args)}"'
-            else:
-                msg = apy_lp(lp)
+            msg = apy_all(lp=arg)
     except Exception as error:
         util.error()
         msg = str(error)
@@ -195,11 +167,7 @@ def vol(update, context):
         if arg.upper() == 'ALL' or arg.upper() == 'TOP' or arg.upper() == 'CALC':
             msg = vol_all(arg.upper())
         else:
-            lp = args_to_lp(context.args)
-            if lp == '':
-                msg = f'Invalid parameters "{" ".join(context.args)}"'
-            else:
-                msg = vol_lp(lp)
+            msg = f'Invalid parameters "{" ".join(context.args)}"'
     except Exception as error:
         util.error()
         msg = str(error)
@@ -233,7 +201,6 @@ def args_to_lp(args):
     lp = ''.join(args).upper().replace('-', '')
     if 'FSN' in lp:
         coin1 = 'FSN'
-        lp = lp.replace('AUSDT', 'USDT').replace('AETH', 'ETH').replace('ABTC', 'BTC').replace('AUNI', 'UNI')
     elif 'BNB' in lp:
         coin1 = 'BNB'
     else:
@@ -264,7 +231,7 @@ def il(update, context):
 
 
 def tvl_all():
-    msg = '<b>Total Value Locked (TVL) on Anyswap</b>\n'
+    msg = '<b>Total Value Locked (TVL) on Anyswap</b>\n<code>'
     records = myDB.getTVLall()
     if len(records) == 0:
         return 'Unable to load data'
@@ -272,17 +239,18 @@ def tvl_all():
     i = 0
     others_tvl = 0
     for rec in records:
-        i += 1
         total_tvl += float(rec.price) * float(rec.tvl)
-        if i <= 6:
+        if rec.usd > 2000:
+            i += 1
+            rec.index = i
             msg += str(rec) + '\n'
         else:
             others_tvl += float(rec.price) * float(rec.tvl)
     if others_tvl > 0:
-        msg += str(f'${others_tvl:,.0f}').ljust(10) + ' Others\n'
-    msg += '=' * 17 + '\n'
-    msg += str(f'${total_tvl:,.0f}').ljust(10) + ' Total'
-    msg += ''
+        msg += 'Others:' + ' ' * 15 + util.formatcurrency(others_tvl) + '\n'
+    msg += '=' * 32 + '\n'
+    msg += 'Total:' + ' ' * 16 + util.formatcurrency(total_tvl) + '\n'
+    msg += '</code>'
     return msg
 
 
@@ -323,4 +291,29 @@ def net(update, context):
     printInfo('NET', msg, update, context)
     message = context.bot.send_message(chat_id=update.effective_chat.id, text=msg, parse_mode='HTML')
     deleteMsg(context.bot, message)
+    return
+
+
+@run_async
+def cyc(update, context):
+    try:
+        lp_bnb_balance = float(myWeb3.getBalance('BSC', myWeb3.bnb_cyc_address, myWeb3.base_address))
+        lp_cyc_balance = float(myWeb3.getBalance('BSC', myWeb3.bnb_cyc_address, myWeb3.bcyc_address))
+        bnbprice = myWeb3.getPrice('BNB')
+        cycprice = bnbprice * lp_bnb_balance / lp_cyc_balance
+        liqusd = bnbprice * lp_bnb_balance * 2
+        message = '<code>'
+        message += 'CYC price'.ljust(12) + ': ' + f'${cycprice:.5f}'
+        message += '\n' + 'Liquidty'.ljust(12) + ': ' + str(f'{lp_bnb_balance:,.0f}') + ' BNB' + ' + ' + str(f'{lp_cyc_balance:,.0f}') + ' CYC'
+        message += '\n' + 'Liquidty USD'.ljust(12) + ': ' + str(f'${liqusd:,.0f}')
+        message += '\n' + 'Circ. supply'.ljust(12) + ': ' + str(f'{myWeb3.getCYCTotalSupply():,.0f} CYC')
+        message += '</code>'
+        message += '\n\n<em>* Next rebase in approximately ' + str(f'{minutes_till_hourhead()} minutes..') + '</em>\n'
+    except Exception as error:
+        message = str(error)
+        util.error()
+    printInfo('CYC', message, update, context)
+    tg_msg = context.bot.send_message(chat_id=update.effective_chat.id, text=message,
+                                      parse_mode='HTML')
+    deleteMsg(context.bot, tg_msg)
     return
